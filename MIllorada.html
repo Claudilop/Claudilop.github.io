@@ -62,12 +62,12 @@
         .cursor-dot {
             width: 8px; height: 8px; background: var(--primary);
             position: fixed; top: 0; left: 0; border-radius: 50%;
-            pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 10001; transform: translate(-50%, -50%);
         }
         .cursor-circle {
             width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.3);
             position: fixed; top: 0; left: 0; border-radius: 50%;
-            pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
             transition: width 0.3s, height 0.3s, border-color 0.3s;
         }
         body.hover-active .cursor-circle {
@@ -164,7 +164,7 @@
         }
         input:focus, textarea:focus { outline: none; border-color: var(--primary); }
 
-        /* --- COOKIE POPUP (NUEVO) --- */
+        /* --- COOKIE POPUP --- */
         #cookie-consent {
             position: fixed;
             bottom: 30px;
@@ -205,7 +205,7 @@
             margin-bottom: 20px;
         }
 
-        .cookie-content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .cookie-content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; cursor: none; }
         .cookie-content a:hover { border-color: var(--primary); }
 
         .cookie-actions {
@@ -235,6 +235,61 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .btn-decline:hover { border-color: #fff; color: #fff; }
+
+        /* --- MODAL POLÍTICA DE PRIVACIDAD (NUEVO) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 9995;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.1);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: none;
+            transition: 0.3s;
+        }
+        .close-modal:hover { color: var(--primary); }
+
+        .legal-text h2 { margin-bottom: 20px; color: var(--primary); }
+        .legal-text h3 { margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; }
+        .legal-text p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px; }
 
 
         /* --- ANIMACIONES --- */
@@ -354,10 +409,36 @@
     <div id="cookie-consent">
         <div class="cookie-content">
             <h4>🍪 Cookies & Privacidad</h4>
-            <p>Usamos cookies propias y de terceros para mejorar tu experiencia en Stepland. Al continuar navegando, aceptas nuestra <a href="#">Política de Privacidad</a>.</p>
+            <p>Usamos cookies propias y de terceros para mejorar tu experiencia en Stepland. Al continuar navegando, aceptas nuestra <a href="#" id="open-privacy-link">Política de Privacidad</a>.</p>
             <div class="cookie-actions">
                 <button id="btn-accept-cookies" class="btn-cookie btn-accept">Aceptar Todo</button>
                 <button id="btn-decline-cookies" class="btn-cookie btn-decline">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="privacy-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal-btn">&times;</button>
+            <div class="legal-text">
+                <h2>Política de Privacidad</h2>
+                <p>Última actualización: Enero 2026</p>
+                
+                <h3>1. Introducción</h3>
+                <p>En Somni Game Studios, nos tomamos muy en serio tu privacidad. Esta política describe cómo recopilamos, usamos y protegemos tu información personal cuando usas nuestros juegos como Stepland.</p>
+                
+                <h3>2. Datos que recopilamos</h3>
+                <p>Para el funcionamiento de Stepland, podemos requerir acceso a datos de salud (como pasos diarios) a través de Google Fit o Apple HealthKit. Estos datos se usan EXCLUSIVAMENTE para las mecánicas del juego y nunca se venden a terceros.</p>
+                
+                <h3>3. Cookies</h3>
+                <p>Utilizamos cookies técnicas para recordar tus preferencias de navegación en esta web.</p>
+
+                <h3>4. Contacto</h3>
+                <p>Si tienes dudas sobre el tratamiento de tus datos, contáctanos en: contacto@somnigamestudios.com</p>
+
+                <div class="magnetic-wrap" style="margin-top: 30px;">
+                    <button id="close-modal-action" class="btn-primary" style="font-size: 0.9rem; padding: 10px 20px;">Entendido, cerrar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -393,8 +474,6 @@
                 preloader.style.opacity = '0';
                 setTimeout(() => { preloader.style.display = 'none'; }, 500);
             }, 800);
-            
-            // --- LÓGICA DE COOKIES (Se activa después del preloader) ---
             initCookieConsent();
         });
 
@@ -445,27 +524,49 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 
-        /* --- 7. LÓGICA DEL POPUP DE COOKIES --- */
+        /* --- 7. LÓGICA DE COOKIES & MODAL DE PRIVACIDAD --- */
         function initCookieConsent() {
             const cookiePopup = document.getElementById('cookie-consent');
             const acceptBtn = document.getElementById('btn-accept-cookies');
             const declineBtn = document.getElementById('btn-decline-cookies');
+            
+            // Elementos del Modal
+            const privacyLink = document.getElementById('open-privacy-link');
+            const modal = document.getElementById('privacy-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const closeModalAction = document.getElementById('close-modal-action');
 
-            // Comprobar si ya existe una decisión guardada en el navegador
+            // --- ABRIR MODAL ---
+            privacyLink.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita que la página salte
+                modal.classList.add('open');
+            });
+
+            // --- TANCAR MODAL (X i Botó) ---
+            function closeModal() {
+                modal.classList.remove('open');
+            }
+            closeModalBtn.addEventListener('click', closeModal);
+            closeModalAction.addEventListener('click', closeModal);
+
+            // Tancar si cliques fora del contingut
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+
+            // --- LÓGICA DE COOKIES ---
             if (!localStorage.getItem('somni_cookies_decision')) {
-                // Si no existe, mostrar popup después de 2 segundos
                 setTimeout(() => {
                     cookiePopup.classList.add('active');
                 }, 2000);
             }
 
-            // Acción Aceptar
             acceptBtn.addEventListener('click', () => {
                 localStorage.setItem('somni_cookies_decision', 'accepted');
                 cookiePopup.classList.remove('active');
             });
 
-            // Acción Rechazar
             declineBtn.addEventListener('click', () => {
                 localStorage.setItem('somni_cookies_decision', 'declined');
                 cookiePopup.classList.remove('active');

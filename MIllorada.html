@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Somni Game Studios | Stepland</title>
+    <style>
+        /* --- CONFIGURACIÓN VISUAL (Clean Tech) --- */
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --primary: #00ff41; /* Verde Stepland */
+            --accent: #00f3ff;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --font-main: 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'Courier New', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            cursor: none; /* Cursor personalizado */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            width: 100vw;
+            line-height: 1.6;
+        }
+
+        /* --- FONDO MALLA SUTIL --- */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-content { font-size: 1.2rem; letter-spacing: 3px; font-weight: bold; }
+
+        /* --- CURSOR --- */
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--primary);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
+        }
+        .cursor-circle {
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, border-color 0.3s;
+        }
+        body.hover-active .cursor-circle {
+            width: 60px; height: 60px; border-color: var(--primary);
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-link { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.3s; }
+        .nav-link:hover { color: var(--primary); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hacker-text {
+            font-family: var(--font-mono);
+            font-size: 6rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            color: var(--text);
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -3px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* --- BOTONES --- */
+        .magnetic-wrap { display: inline-block; }
+        .btn-primary {
+            padding: 18px 45px; background: var(--text); color: var(--bg);
+            font-weight: 700; border-radius: 50px; text-decoration: none;
+            display: inline-block; transition: transform 0.2s, box-shadow 0.3s;
+            border: none; cursor: none;
+        }
+        .btn-primary:hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+
+        /* --- SECCIONES --- */
+        .section { padding: 120px 10%; }
+        .section-header { margin-bottom: 80px; }
+        .section-title { font-size: 2.5rem; margin-bottom: 15px; }
+        .section-subtitle { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; display: block; margin-bottom: 10px; }
+
+        /* --- GRID PROYECTOS --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--surface); padding: 40px; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .project-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .tag {
+            display: inline-block; padding: 5px 12px; background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px; font-size: 0.75rem; color: var(--primary); margin-top: 20px;
+        }
+
+        /* --- CONTACTO --- */
+        .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        .form-group { margin-bottom: 25px; }
+        input, textarea {
+            width: 100%; padding: 15px; background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1); color: white;
+            border-radius: 8px; font-family: inherit; font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* --- COOKIE POPUP (NUEVO) --- */
+        #cookie-consent {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 380px;
+            max-width: 90%;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            z-index: 9990;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        #cookie-consent.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .cookie-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cookie-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .cookie-content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .cookie-content a:hover { border-color: var(--primary); }
+
+        .cookie-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-cookie {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            cursor: none;
+            transition: 0.2s;
+        }
+
+        .btn-accept {
+            background: var(--primary);
+            color: #000;
+        }
+        .btn-accept:hover { background: #fff; }
+
+        .btn-decline {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-decline:hover { border-color: #fff; color: #fff; }
+
+
+        /* --- ANIMACIONES --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        footer { padding: 50px 10%; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); display: flex; justify-content: space-between; }
+
+        @media (max-width: 768px) {
+            .hacker-text { font-size: 3.5rem; }
+            .contact-layout { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            #cookie-consent { right: 5%; bottom: 20px; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    
+    <div id="preloader">
+        <div class="loader-content">CARGANDO...</div>
+    </div>
+
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
+
+    <nav>
+        <div class="logo">Somni<span>.</span></div>
+        <div class="nav-links">
+            <a href="#inicio" class="nav-link">Inicio</a>
+            <a href="#nosotros" class="nav-link">Nosotros</a>
+            <a href="#proyectos" class="nav-link">Proyectos</a>
+            <a href="#contacto" class="nav-link">Contacto</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="inicio">
+        <h1 class="hacker-text" data-value="STEPLAND">STEPLAND</h1>
+        <p class="reveal">Transforma tus hábitos en un mundo virtual. <br>El primer videojuego de Somni Game Studios.</p>
+        <div class="magnetic-wrap reveal">
+            <a href="#proyectos" class="btn-primary">Ver Proyecto</a>
+        </div>
+    </section>
+
+    <section class="section" id="nosotros">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Filosofía</span>
+            <h2 class="section-title">Innovación y Salud</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px;">
+            <p class="reveal" style="color: var(--text-muted); font-size: 1.1rem;">
+                Somos soñadores. En Somni Game Studios creemos que los videojuegos son la herramienta perfecta para mejorar la vida de las personas.
+            </p>
+            <p class="reveal" style="color: var(--text-muted); font-size: 1.1rem;">
+                Nuestro objetivo es crear un ecosistema donde la diversión y los hábitos saludables se fusionen. Jugar ya no es sedentarismo, es evolución.
+            </p>
+        </div>
+    </section>
+
+    <section class="section" id="proyectos">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Portfolio</span>
+            <h2 class="section-title">Ecosistema Somni</h2>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <h3>Stepland</h3>
+                <p>El videojuego que te recompensa por caminar. Tu actividad física real hace crecer tu aldea virtual. Hidrátate, descansa y muévete para ganar.</p>
+                <span class="tag">Ya disponible</span> <span class="tag">Mobile RPG</span>
+            </div>
+
+            <div class="project-card reveal">
+                <h3>Comunidad & Testers</h3>
+                <p>Únete a nuestro grupo de jugadores colaboradores. Participa en betas cerradas y ayuda a moldear el futuro de nuestros juegos.</p>
+                <span class="tag">Discord</span> <span class="tag">Colaboración</span>
+            </div>
+
+            <div class="project-card reveal">
+                <h3>Publishers & Inversores</h3>
+                <p>¿Buscas invertir en Gaming for Health? Estamos abiertos a colaboraciones estratégicas para llevar Stepland al siguiente nivel.</p>
+                <span class="tag">B2B</span> <span class="tag">Partnership</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contacto">
+        <div class="contact-layout">
+            <div class="reveal">
+                <span class="section-subtitle">Contacto</span>
+                <h2 class="section-title">Hablemos</h2>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">
+                    ¿Tienes dudas sobre Stepland? ¿Eres un publisher interesado? Escríbenos.
+                </p>
+                <p style="color: var(--text);">📩 contacto@somnigamestudios.com</p>
+            </div>
+
+            <form class="reveal">
+                <div class="form-group">
+                    <input type="text" placeholder="Tu Nombre">
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Correo Electrónico">
+                </div>
+                <div class="form-group">
+                    <textarea rows="4" placeholder="Tu Mensaje"></textarea>
+                </div>
+                <div class="magnetic-wrap">
+                    <button type="button" class="btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div id="cookie-consent">
+        <div class="cookie-content">
+            <h4>🍪 Cookies & Privacidad</h4>
+            <p>Usamos cookies propias y de terceros para mejorar tu experiencia en Stepland. Al continuar navegando, aceptas nuestra <a href="#">Política de Privacidad</a>.</p>
+            <div class="cookie-actions">
+                <button id="btn-accept-cookies" class="btn-cookie btn-accept">Aceptar Todo</button>
+                <button id="btn-decline-cookies" class="btn-cookie btn-decline">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>© 2026 Somni Game Studios.</div>
+        <div style="font-size: 0.9rem;">Vandellòs i l'Hospitalet de l'Infant, Tarragona</div>
+    </footer>
+
+    <script>
+        /* --- JS: INTERACTIVIDAD --- */
+
+        // 1. Efecto HACKER
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        document.querySelector('.hacker-text').addEventListener('mouseover', event => {
+            let iterations = 0;
+            const element = event.target;
+            const originalText = element.dataset.value;
+            const interval = setInterval(() => {
+                element.innerText = originalText.split("").map((letter, index) => {
+                    if(index < iterations) return originalText[index];
+                    return letters[Math.floor(Math.random() * 36)];
+                }).join("");
+                if(iterations >= originalText.length) clearInterval(interval);
+                iterations += 1 / 3;
+            }, 30);
+        });
+
+        // 2. Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }, 800);
+            
+            // --- LÓGICA DE COOKIES (Se activa después del preloader) ---
+            initCookieConsent();
+        });
+
+        // 3. Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+        let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+        });
+
+        function animateCursor() {
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            cursorCircle.style.transform = `translate(${circleX}px, ${circleY}px) translate(-50%, -50%)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // 4. Hover Interactions
+        const interactables = document.querySelectorAll('a, button, input, textarea, .project-card, .hacker-text, .btn-cookie');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+        });
+
+        // 5. Botones Magnéticos
+        document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                wrap.children[0].style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            wrap.addEventListener('mouseleave', () => {
+                wrap.children[0].style.transform = `translate(0px, 0px)`;
+            });
+        });
+
+        // 6. Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+        /* --- 7. LÓGICA DEL POPUP DE COOKIES --- */
+        function initCookieConsent() {
+            const cookiePopup = document.getElementById('cookie-consent');
+            const acceptBtn = document.getElementById('btn-accept-cookies');
+            const declineBtn = document.getElementById('btn-decline-cookies');
+
+            // Comprobar si ya existe una decisión guardada en el navegador
+            if (!localStorage.getItem('somni_cookies_decision')) {
+                // Si no existe, mostrar popup después de 2 segundos
+                setTimeout(() => {
+                    cookiePopup.classList.add('active');
+                }, 2000);
+            }
+
+            // Acción Aceptar
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('somni_cookies_decision', 'accepted');
+                cookiePopup.classList.remove('active');
+            });
+
+            // Acción Rechazar
+            declineBtn.addEventListener('click', () => {
+                localStorage.setItem('somni_cookies_decision', 'declined');
+                cookiePopup.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>

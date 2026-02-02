@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projecte Professional: SMX a Esport</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta de colors millorada */
+            --primary-gradient: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); /* Verd energètic */
+            --secondary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Blau tech profund */
+            --accent-color: #00c6ff;
+            --dark-bg: #111827;
+            --card-bg: #ffffff;
+            --text-main: #374151;
+            --text-light: #9ca3af;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f3f4f6;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar-custom {
+            background: rgba(17, 24, 39, 0.85); /* Fons fosc translúcid */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .nav-link {
+            font-weight: 600;
+            margin: 0 10px;
+            position: relative;
+            color: rgba(255,255,255,0.8) !important;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff !important;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--primary-gradient);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            background: var(--dark-bg);
+            background-image: radial-gradient(circle at top right, rgba(0, 176, 155, 0.2), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(30, 60, 114, 0.2), transparent 40%);
+            color: white;
+            padding: 180px 0 120px;
+            position: relative;
+            clip-path: ellipse(150% 100% at 50% 0%); /* Corba suau a baix */
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #a5f3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .btn-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 176, 155, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 176, 155, 0.5);
+            color: white;
+        }
+        .btn-outline-light {
+            border-width: 2px;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+        .btn-outline-light:hover {
+            background: white;
+            color: var(--dark-bg);
+        }
+
+        /* --- SECCIONS GENERALS --- */
+        .section-title {
+            font-weight: 800;
+            color: var(--dark-bg);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: -10px;
+            width: 110%;
+            height: 15px;
+            background: rgba(0, 176, 155, 0.2);
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        /* --- CARDS (Bloc A & B) --- */
+        .hover-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .hover-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .hover-card::top {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--secondary-gradient);
+        }
+        
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 176, 155, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #00b09b;
+        }
+
+        /* --- BLOC B: JOBS --- */
+        .job-card {
+            border-left: 5px solid #00b09b;
+        }
+        .job-card .salary-tag {
+            background: #ecfdf5;
+            color: #059669;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* --- BLOC C: TIMELINE --- */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        /* Línia Central */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 4px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            margin-bottom: 60px;
+            position: relative;
+            width: 50%;
+        }
+        
+        .timeline-item:nth-child(odd) { left: 0; padding-right: 40px; text-align: right; }
+        .timeline-item:nth-child(even) { left: 50%; padding-left: 40px; text-align: left; }
+
+        /* Contingut Timeline */
+        .timeline-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+            transition: 0.3s;
+        }
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Punt (Dot) */
+        .timeline-dot {
+            position: absolute;
+            top: 30px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 5px solid #00b09b;
+            z-index: 2;
+            box-shadow: 0 0 0 5px rgba(0, 176, 155, 0.2);
+        }
+        .timeline-item:nth-child(odd) .timeline-dot { right: -12px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -12px; }
+
+        /* Estats del timeline */
+        .step-current .timeline-dot { border-color: #2a5298; box-shadow: 0 0 0 5px rgba(42, 82, 152, 0.2); }
+        .step-target .timeline-content { border: 2px solid #00b09b; background: #f0fdf4; }
+        .step-target .timeline-dot { background: #00b09b; }
+
+        /* Responsive Timeline */
+        @media (max-width: 768px) {
+            .timeline::before { left: 30px; }
+            .timeline-item { width: 100%; left: 0; padding-left: 70px; padding-right: 0; text-align: left; }
+            .timeline-item:nth-child(odd) { text-align: left; padding-right: 0; }
+            .timeline-item:nth-child(odd) .timeline-dot, 
+            .timeline-item:nth-child(even) .timeline-dot { left: 18px; right: auto; }
+            .hero-title { font-size: 2.5rem; }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 4rem 0 2rem;
+            position: relative;
+        }
+        .footer-line {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 2rem auto;
+            width: 80%;
+        }
+
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-cpu me-2 text-info"></i>SMX<span style="color:#00b09b">SPORT</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#hero">Inici</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bloc-a">Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bloc-b">Ofertes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bloc-c">Itinerari</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header id="hero" class="hero-section text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-white text-dark rounded-pill px-3 py-2 mb-3 fw-bold">Projecte Professional Final</span>
+                    <h1 class="display-3 hero-title">De l'SMX al<br>Món de l'Esport</h1>
+                    <p class="lead text-white-50 mb-5 fs-4">Un itinerari formatiu únic que fusiona la tecnologia avançada amb el rendiment físic.</p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="#bloc-a" class="btn btn-gradient">Descobrir el Perfil</a>
+                        <a href="#bloc-c" class="btn btn-outline-light">Veure el Camí</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="bloc-a" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-secondary fw-bold small text-uppercase ls-2">Bloc A</span>
+                <br>
+                <h2 class="section-title">Definició del Perfil</h2>
+            </div>
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-10">
+                    <div class="hover-card d-flex flex-column flex-md-row align-items-center bg-white">
+                        <div class="me-md-5 mb-4 mb-md-0 text-center">
+                            <i class="bi bi-trophy-fill" style="font-size: 5rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-3">L'Entrenador Esportiu Tecnològic</h3>
+                            <p class="lead text-muted">
+                                Un professional que no només entrena, sinó que optimitza. Utilitzo la base tècnica de l'SMX per aplicar <strong>Big Data i Biomecànica</strong> a la planificació esportiva, diferenciant-me de l'entrenador tradicional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="hover-card text-center">
+                        <div class="icon-box mx-auto"><i class="bi bi-calendar-check"></i></div>
+                        <h5 class="fw-bold">Planificació</h5>
+                        <p class="text-muted small">Disseny de macrocicles i rutines adaptades amb precisió matemàtica al calendari.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="hover-card text-center">
+                        <div class="icon-box mx-auto text-primary" style="background: rgba(30, 60, 114, 0.1); color: #1e3c72;"><i class="bi bi-people-fill"></i></div>
+                        <h5 class="fw-bold">Direcció Tècnica</h5>
+                        <p class="text-muted small">Execució a camp, correcció postural biomecànica i motivació d'equips.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="hover-card text-center" style="border-bottom: 5px solid #00c6ff;">
+                        <div class="icon-box mx-auto text-info" style="background: rgba(0, 198, 255, 0.1); color: #00c6ff;"><i class="bi bi-cpu-fill"></i></div>
+                        <h5 class="fw-bold">Plus SMX: Analítica</h5>
+                        <p class="text-muted small">Gestió avançada de bases de dades d'atletes, GPS i software de vídeo-anàlisi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bloc-b" class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-secondary fw-bold small text-uppercase">Bloc B</span>
+                <br>
+                <h2 class="section-title">Mercat Laboral</h2>
+                <p class="text-muted">Selecció de 5 ofertes reals analitzades</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="hover-card job-card h-100 p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-dark">Club Esportiu</span>
+                            <span class="badge bg-danger">Urgent</span>
+                        </div>
+                        <h5 class="fw-bold">Entrenador Futbol Base</h5>
+                        <span class="salary-tag">12€ - 15€ / h</span>
+                        <p class="small text-muted mt-3 mb-0">Experiència amb joves i lideratge d'equips.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="hover-card job-card h-100 p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-dark">Anytime Fitness</span>
+                            <span class="badge bg-success">Nou</span>
+                        </div>
+                        <h5 class="fw-bold">Monitor de Fitness</h5>
+                        <span class="salary-tag">20k € Brut/Any</span>
+                        <p class="small text-muted mt-3 mb-0">Supervisió de sala i classes dirigides.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="hover-card job-card h-100 p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-dark">Ajuntament</span>
+                        </div>
+                        <h5 class="fw-bold">Coordinador Esportiu</h5>
+                        <span class="salary-tag">Segons Conveni</span>
+                        <p class="small text-muted mt-3 mb-0">Gestió integral d'equips i instal·lacions.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="hover-card job-card h-100 p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-dark">Freelance</span>
+                            <i class="bi bi-briefcase text-secondary"></i>
+                        </div>
+                        <h5 class="fw-bold">Personal Trainer (Autònom)</h5>
+                        <span class="salary-tag">Comissió + Variable</span>
+                        <p class="small text-muted mt-3 mb-0">Gestió de cartera pròpia. Perfil comercial i tècnic.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="hover-card job-card h-100 p-4" style="border-left-color: #2a5298;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-dark">Alt Rendiment</span>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold">Preparador Físic Tennis</h5>
+                        <span class="salary-tag">A convenir (Alt)</span>
+                        <p class="small text-muted mt-3 mb-0">Ús obligatori de GPS i software d'anàlisi (El meu perfil ideal).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="d-inline-block bg-light px-4 py-3 rounded-pill border">
+                    <i class="bi bi-info-circle-fill text-info me-2"></i>
+                    <strong>Conclusió:</strong> El mercat valora cada cop més el perfil híbrid (Esport + TIC).
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bloc-c" class="py-5" style="background-color: #f9fafb;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-secondary fw-bold small text-uppercase">Bloc C</span>
+                <br>
+                <h2 class="section-title">El Meu Camí</h2>
+                <p class="text-muted">Itinerari formatiu pas a pas</p>
+            </div>
+
+            <div class="timeline">
+                
+                <div class="timeline-item step-current">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-laptop fs-4 me-2 text-primary"></i>
+                            <h4 class="fw-bold m-0">CFGM SMX</h4>
+                        </div>
+                        <span class="badge bg-info text-dark mb-2">Present</span>
+                        <p class="text-muted small">Sistemes Microinformàtics i Xarxes. Objectiu: Obtenir el títol i les competències digitals que seran el meu valor afegit.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-arrow-up-right-circle fs-4 me-2 text-secondary"></i>
+                            <h4 class="fw-bold m-0">Accés Directe</h4>
+                        </div>
+                        <p class="text-muted small">Amb el títol d'SMX, tinc accés directe als Cicles Formatius de Grau Superior. Escolliré la família d'Activitats Físiques.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item step-target">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-flag-fill fs-4 me-2 text-success"></i>
+                            <h4 class="fw-bold m-0 text-success">CFGS TSAF</h4>
+                        </div>
+                        <span class="badge bg-success mb-2">Objectiu Principal</span>
+                        <p class="text-muted small">Tècnic Superior en Condicionament Físic. Aquests 2 anys són la clau per obtenir el títol oficial i l'accés al ROPEC.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-infinity fs-4 me-2 text-dark"></i>
+                            <h4 class="fw-bold m-0">Futur / Especialització</h4>
+                        </div>
+                        <p class="text-muted small">Opció de continuar cap al Grau Universitari (CAFE) o fer cursos d'especialització en Alt Rendiment o Nutrició.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center">
+        <div class="container">
+            <h4 class="fw-bold mb-3">SMX <span style="color:#00b09b">SPORT</span></h4>
+            <p class="text-white-50 small mb-4">Projecte desenvolupat per a l'assignatura de FOL/EIE</p>
+            <div class="footer-line"></div>
+            <small class="text-white-50">&copy; 2024 - Creat amb Bootstrap 5 & Passion</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

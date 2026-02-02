@@ -119,6 +119,7 @@
 
         /* --- BOTONES --- */
         .magnetic-wrap { display: inline-block; }
+        
         .btn-primary {
             padding: 18px 45px; background: var(--text); color: var(--bg);
             font-weight: 700; border-radius: 50px; text-decoration: none;
@@ -126,6 +127,21 @@
             border: none; cursor: none;
         }
         .btn-primary:hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+
+        /* Botón secundario para la tarjeta */
+        .btn-secondary {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            cursor: none;
+        }
+        .btn-secondary:hover { background: var(--primary); color: #000; }
 
         /* --- SECCIONES --- */
         .section { padding: 120px 10%; }
@@ -145,6 +161,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.3s, border-color 0.3s;
             position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
         .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
         .project-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
@@ -167,130 +184,49 @@
         /* --- COOKIE POPUP --- */
         #cookie-consent {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 380px;
-            max-width: 90%;
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 25px;
-            z-index: 9990;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            transform: translateY(100px);
-            opacity: 0;
-            pointer-events: none;
+            bottom: 30px; right: 30px; width: 380px; max-width: 90%;
+            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px;
+            z-index: 9990; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transform: translateY(100px); opacity: 0; pointer-events: none;
             transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
-
-        #cookie-consent.active {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .cookie-content h4 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cookie-content p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
+        #cookie-consent.active { transform: translateY(0); opacity: 1; pointer-events: all; }
+        .cookie-content h4 { font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .cookie-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
         .cookie-content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; cursor: none; }
         .cookie-content a:hover { border-color: var(--primary); }
-
-        .cookie-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-cookie {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: none;
-            cursor: none;
-            transition: 0.2s;
-        }
-
-        .btn-accept {
-            background: var(--primary);
-            color: #000;
-        }
+        .cookie-actions { display: flex; gap: 15px; }
+        .btn-cookie { padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; border: none; cursor: none; transition: 0.2s; }
+        .btn-accept { background: var(--primary); color: #000; }
         .btn-accept:hover { background: #fff; }
-
-        .btn-decline {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .btn-decline { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
         .btn-decline:hover { border-color: #fff; color: #fff; }
 
-        /* --- MODAL POLÍTICA DE PRIVACIDAD (NUEVO) --- */
+        /* --- MODAL POLÍTICA PRIVACIDAD --- */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            z-index: 9995;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9995;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
-
-        .modal-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
         .modal-content {
-            background: #111;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            border-radius: 20px;
-            padding: 40px;
-            position: relative;
-            overflow-y: auto;
+            background: #111; border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%; max-width: 600px; max-height: 80vh; border-radius: 20px;
+            padding: 40px; position: relative; overflow-y: auto;
             box-shadow: 0 0 50px rgba(0, 255, 65, 0.1);
-            transform: scale(0.9);
-            transition: transform 0.3s;
+            transform: scale(0.9); transition: transform 0.3s;
         }
-
-        .modal-overlay.open .modal-content {
-            transform: scale(1);
-        }
-
+        .modal-overlay.open .modal-content { transform: scale(1); }
         .close-modal {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: none;
-            transition: 0.3s;
+            position: absolute; top: 20px; right: 20px; background: transparent;
+            border: none; color: var(--text-muted); font-size: 1.5rem; cursor: none; transition: 0.3s;
         }
         .close-modal:hover { color: var(--primary); }
-
         .legal-text h2 { margin-bottom: 20px; color: var(--primary); }
         .legal-text h3 { margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; }
         .legal-text p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px; }
-
 
         /* --- ANIMACIONES --- */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
@@ -331,8 +267,9 @@
     <section class="hero" id="inicio">
         <h1 class="hacker-text" data-value="STEPLAND">STEPLAND</h1>
         <p class="reveal">Transforma tus hábitos en un mundo virtual. <br>El primer videojuego de Somni Game Studios.</p>
+        
         <div class="magnetic-wrap reveal">
-            <a href="#proyectos" class="btn-primary">Ver Proyecto</a>
+            <a href="https://stepland.es/" target="_blank" class="btn-primary">WEB OFICIAL STEPLAND &nearr;</a>
         </div>
     </section>
 
@@ -359,21 +296,30 @@
 
         <div class="projects-grid">
             <div class="project-card reveal">
-                <h3>Stepland</h3>
-                <p>El videojuego que te recompensa por caminar. Tu actividad física real hace crecer tu aldea virtual. Hidrátate, descansa y muévete para ganar.</p>
-                <span class="tag">Ya disponible</span> <span class="tag">Mobile RPG</span>
+                <div>
+                    <h3>Stepland</h3>
+                    <p>El videojuego que te recompensa por caminar. Tu actividad física real hace crecer tu aldea virtual. Hidrátate, descansa y muévete para ganar.</p>
+                </div>
+                <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <span class="tag">Mobile RPG</span>
+                    <a href="https://stepland.es/" target="_blank" class="btn-secondary">Visitar Web</a>
+                </div>
             </div>
 
             <div class="project-card reveal">
-                <h3>Comunidad & Testers</h3>
-                <p>Únete a nuestro grupo de jugadores colaboradores. Participa en betas cerradas y ayuda a moldear el futuro de nuestros juegos.</p>
-                <span class="tag">Discord</span> <span class="tag">Colaboración</span>
+                <div>
+                    <h3>Comunidad & Testers</h3>
+                    <p>Únete a nuestro grupo de jugadores colaboradores. Participa en betas cerradas y ayuda a moldear el futuro de nuestros juegos.</p>
+                </div>
+                <span class="tag">Discord</span>
             </div>
 
             <div class="project-card reveal">
-                <h3>Publishers & Inversores</h3>
-                <p>¿Buscas invertir en Gaming for Health? Estamos abiertos a colaboraciones estratégicas para llevar Stepland al siguiente nivel.</p>
-                <span class="tag">B2B</span> <span class="tag">Partnership</span>
+                <div>
+                    <h3>Publishers & Inversores</h3>
+                    <p>¿Buscas invertir en Gaming for Health? Estamos abiertos a colaboraciones estratégicas para llevar Stepland al siguiente nivel.</p>
+                </div>
+                <span class="tag">B2B</span>
             </div>
         </div>
     </section>
@@ -409,7 +355,7 @@
     <div id="cookie-consent">
         <div class="cookie-content">
             <h4>🍪 Cookies & Privacidad</h4>
-            <p>Usamos cookies propias y de terceros para mejorar tu experiencia en Stepland. Al continuar navegando, aceptas nuestra <a href="#" id="open-privacy-link">Política de Privacidad</a>.</p>
+            <p>Usamos cookies propias y de terceros para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a href="#" id="open-privacy-link">Política de Privacidad</a>.</p>
             <div class="cookie-actions">
                 <button id="btn-accept-cookies" class="btn-cookie btn-accept">Aceptar Todo</button>
                 <button id="btn-decline-cookies" class="btn-cookie btn-decline">Rechazar</button>
@@ -423,21 +369,14 @@
             <div class="legal-text">
                 <h2>Política de Privacidad</h2>
                 <p>Última actualización: Enero 2026</p>
-                
                 <h3>1. Introducción</h3>
-                <p>En Somni Game Studios, nos tomamos muy en serio tu privacidad. Esta política describe cómo recopilamos, usamos y protegemos tu información personal cuando usas nuestros juegos como Stepland.</p>
-                
+                <p>En Somni Game Studios, nos tomamos muy en serio tu privacidad. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.</p>
                 <h3>2. Datos que recopilamos</h3>
-                <p>Para el funcionamiento de Stepland, podemos requerir acceso a datos de salud (como pasos diarios) a través de Google Fit o Apple HealthKit. Estos datos se usan EXCLUSIVAMENTE para las mecánicas del juego y nunca se venden a terceros.</p>
-                
-                <h3>3. Cookies</h3>
-                <p>Utilizamos cookies técnicas para recordar tus preferencias de navegación en esta web.</p>
-
-                <h3>4. Contacto</h3>
-                <p>Si tienes dudas sobre el tratamiento de tus datos, contáctanos en: contacto@somnigamestudios.com</p>
-
+                <p>Para el funcionamiento de Stepland, podemos requerir acceso a datos de salud (pasos) a través de Google Fit o Apple HealthKit, usados EXCLUSIVAMENTE para las mecánicas del juego.</p>
+                <h3>3. Contacto</h3>
+                <p>Dudas: contacto@somnigamestudios.com</p>
                 <div class="magnetic-wrap" style="margin-top: 30px;">
-                    <button id="close-modal-action" class="btn-primary" style="font-size: 0.9rem; padding: 10px 20px;">Entendido, cerrar</button>
+                    <button id="close-modal-action" class="btn-primary" style="font-size: 0.9rem; padding: 10px 20px;">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -449,9 +388,9 @@
     </footer>
 
     <script>
-        /* --- JS: INTERACTIVIDAD --- */
+        /* --- JS: FUNCIONALIDAD --- */
 
-        // 1. Efecto HACKER
+        // 1. Hacker Effect
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         document.querySelector('.hacker-text').addEventListener('mouseover', event => {
             let iterations = 0;
@@ -467,7 +406,7 @@
             }, 30);
         });
 
-        // 2. Preloader
+        // 2. Preloader & Init
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
@@ -477,7 +416,7 @@
             initCookieConsent();
         });
 
-        // 3. Cursor
+        // 3. Custom Cursor
         const cursorDot = document.getElementById('cursor-dot');
         const cursorCircle = document.getElementById('cursor-circle');
         let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
@@ -495,14 +434,14 @@
         }
         animateCursor();
 
-        // 4. Hover Interactions
+        // 4. Hovers
         const interactables = document.querySelectorAll('a, button, input, textarea, .project-card, .hacker-text, .btn-cookie');
         interactables.forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
         });
 
-        // 5. Botones Magnéticos
+        // 5. Magnetic Buttons
         document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
             wrap.addEventListener('mousemove', (e) => {
                 const rect = wrap.getBoundingClientRect();
@@ -523,43 +462,29 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-
-        /* --- 7. LÓGICA DE COOKIES & MODAL DE PRIVACIDAD --- */
+        // 7. Cookies & Privacy Modal
         function initCookieConsent() {
             const cookiePopup = document.getElementById('cookie-consent');
             const acceptBtn = document.getElementById('btn-accept-cookies');
             const declineBtn = document.getElementById('btn-decline-cookies');
             
-            // Elementos del Modal
             const privacyLink = document.getElementById('open-privacy-link');
             const modal = document.getElementById('privacy-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const closeModalAction = document.getElementById('close-modal-action');
 
-            // --- ABRIR MODAL ---
             privacyLink.addEventListener('click', (e) => {
-                e.preventDefault(); // Evita que la página salte
+                e.preventDefault();
                 modal.classList.add('open');
             });
 
-            // --- TANCAR MODAL (X i Botó) ---
-            function closeModal() {
-                modal.classList.remove('open');
-            }
+            function closeModal() { modal.classList.remove('open'); }
             closeModalBtn.addEventListener('click', closeModal);
             closeModalAction.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-            // Tancar si cliques fora del contingut
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-
-
-            // --- LÓGICA DE COOKIES ---
             if (!localStorage.getItem('somni_cookies_decision')) {
-                setTimeout(() => {
-                    cookiePopup.classList.add('active');
-                }, 2000);
+                setTimeout(() => { cookiePopup.classList.add('active'); }, 2000);
             }
 
             acceptBtn.addEventListener('click', () => {
